@@ -67,6 +67,7 @@ ALLOWED_ROOT_FILES = {
     "importacao_movimentos.xlsx",
     ".gitignore",
     "README.md",
+    ".DS_Store",
 }
 
 
@@ -79,7 +80,7 @@ def check_directory_contents(directory, extension):
         fail_security(f"{directory.name}/ must be a real directory")
 
     for entry in directory.iterdir():
-        if entry.name == ".gitkeep":
+        if entry.name in {".gitkeep", ".DS_Store"}:
             if not entry.is_file() or entry.is_symlink():
                 fail_security(f"{entry} must be a regular file")
             continue

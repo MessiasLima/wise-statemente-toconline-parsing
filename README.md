@@ -13,8 +13,6 @@ Na raiz do repositório devem existir apenas:
 - `README.md`
 - `.gitignore`
 
-O diretório `.git/` também é permitido por conter os metadados do Git. Os ficheiros financeiros em `input/` e `output/` são ignorados pelo Git.
-
 ## Utilização
 
 1. Exporte o extrato da Wise em formato CSV.
@@ -31,6 +29,6 @@ O script processa todos os CSV existentes em `input/` utilizando `importacao_mov
 
 ## Verificação de segurança
 
-Antes de processar os ficheiros, o script termina se encontrar na raiz um item, ligação simbólica, diretório ou extensão não autorizada. A lista permitida inclui o conversor, o modelo, o README, o `.gitignore`, `input/`, `output/` e `.git/`. A pasta `input/` pode conter apenas ficheiros CSV e `.gitkeep`; a pasta `output/` pode conter apenas ficheiros XLSX e `.gitkeep`.
+Antes de processar os ficheiros, o script termina se encontrar na raiz um item, ligação simbólica, diretório ou extensão não autorizada. Isto é para evitar o commit de ficheiros contendo dados financeiros.
 
 Não desative esta verificação nem faça commit de ficheiros financeiros provenientes de qualquer uma das pastas de dados.
