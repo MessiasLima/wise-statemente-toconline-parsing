@@ -58,11 +58,59 @@ def cell(reference, style, value=None, shared_string=False):
     return element
 
 
-def main():
-    if len(sys.argv) != 4:
-        raise SystemExit("Usage: python3 create_import_xlsx.py TEMPLATE.xlsx SOURCE.csv OUTPUT.xlsx")
+ROOT = Path(__file__).resolve().parent
+INPUT_DIR = ROOT / "input"
+OUTPUT_DIR = ROOT / "output"
+TEMPLATE_PATH = ROOT / "importacao_movimentos.xlsx"
+ALLOWED_ROOT_FILES = {
+    "create_import_xlsx.py",
+    "importacao_movimentos.xlsx",
+    ".gitignore",
+    "README.md",
+}
 
-    template_path, source_path, output_path = map(Path, sys.argv[1:])
+
+def fail_security(message):
+    raise SystemExit(f"Security check failed: {message}")
+
+
+def check_directory_contents(directory, extension):
+    if not directory.is_dir() or directory.is_symlink():
+        fail_security(f"{directory.name}/ must be a real directory")
+
+    for entry in directory.iterdir():
+        if entry.name == ".gitkeep":
+            if not entry.is_file() or entry.is_symlink():
+                fail_security(f"{entry} must be a regular file")
+            continue
+        if entry.is_symlink() or not entry.is_file():
+            fail_security(f"unexpected entry in {directory.name}/: {entry.name}")
+        if entry.suffix.lower() != extension:
+            fail_security(f"unexpected file in {directory.name}/: {entry.name}")
+
+
+def security_check():
+    if not ROOT.is_dir():
+        fail_security("repository root is missing")
+
+    for entry in ROOT.iterdir():
+        if entry.name in ALLOWED_ROOT_FILES:
+            if entry.is_symlink() or not entry.is_file():
+                fail_security(f"{entry.name} must be a regular file")
+        elif entry.name == ".git":
+            if entry.is_symlink() or not entry.is_dir():
+                fail_security(".git must be a real directory")
+        elif entry.name in {"input", "output"}:
+            if entry.is_symlink() or not entry.is_dir():
+                fail_security(f"{entry.name}/ must be a real directory")
+        else:
+            fail_security(f"unexpected repository entry: {entry.name}")
+
+    check_directory_contents(INPUT_DIR, ".csv")
+    check_directory_contents(OUTPUT_DIR, ".xlsx")
+
+
+def convert_file(template_path, source_path, output_path):
     required = {
         "Date",
         "Amount",
@@ -188,6 +236,31 @@ def main():
     print(f"Created {output_path} with {len(rows)} transactions")
     print(f"Opening balance: {money(opening)}")
     print(f"Closing balance: {money(closing)}")
+
+
+def main():
+    if len(sys.argv) != 1:
+        raise SystemExit("Usage: python3 create_import_xlsx.py")
+
+    security_check()
+    source_paths = sorted(
+        path for path in INPUT_DIR.iterdir() if path.is_file() and path.suffix.lower() == ".csv"
+    )
+    if not source_paths:
+        raise SystemExit("No CSV files found in input/")
+
+    output_paths = {}
+    for source_path in source_paths:
+        output_path = OUTPUT_DIR / f"{source_path.stem}.xlsx"
+        previous = output_paths.setdefault(output_path.name, source_path.name)
+        if previous != source_path.name:
+            raise SystemExit(
+                f"Multiple input files would create {output_path.name}: {previous}, {source_path.name}"
+            )
+
+    for source_path in source_paths:
+        output_path = OUTPUT_DIR / f"{source_path.stem}.xlsx"
+        convert_file(TEMPLATE_PATH, source_path, output_path)
 
 
 if __name__ == "__main__":

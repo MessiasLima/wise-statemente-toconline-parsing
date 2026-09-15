@@ -1,0 +1,10 @@
+# Financial source and generated files must never be committed.
+/input/**
+/output/**
+!/input/.gitkeep
+!/output/.gitkeep
+
+# Local Python and operating-system artifacts.
+__pycache__/
+*.py[cod]
+.DS_Store
