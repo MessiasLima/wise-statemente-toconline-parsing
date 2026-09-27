@@ -8,6 +8,7 @@ Na raiz do repositório devem existir apenas:
 
 - `create_import_xlsx.py`
 - `importacao_movimentos.xlsx`
+- `.ignore`
 - `input/`
 - `output/`
 - `README.md`

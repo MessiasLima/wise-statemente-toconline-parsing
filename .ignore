@@ -1,0 +1,2 @@
+# Let OpenCode see local financial inputs; .gitignore still prevents commits.
+!/input/**

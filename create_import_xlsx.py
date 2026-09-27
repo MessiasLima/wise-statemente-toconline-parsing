@@ -65,6 +65,7 @@ TEMPLATE_PATH = ROOT / "importacao_movimentos.xlsx"
 ALLOWED_ROOT_FILES = {
     "create_import_xlsx.py",
     "importacao_movimentos.xlsx",
+    ".ignore",
     ".gitignore",
     "README.md",
     ".DS_Store",
