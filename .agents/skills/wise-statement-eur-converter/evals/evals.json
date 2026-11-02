@@ -1,0 +1,40 @@
+{
+  "skill_name": "wise-statement-eur-converter",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Make an EUR copy of this Wise GBP statement. Use Wise GBP-to-EUR rates where they appear. For every other date, ask me for Wise's EUR-per-GBP rate first; don't use ECB or another fallback.",
+      "expected_output": "The assistant inspects the actual CSV, validates its GBP balances, lists all unique dates needing a user-supplied GBP/EUR rate, and waits without creating or replacing an output.",
+      "files": ["evals/files/synthetic_wise_gbp_statement.csv"],
+      "expectations": [
+        "The assistant asks for each unique date missing a row-level GBP-to-EUR quote before converting.",
+        "The GBP-to-USD quote is not treated as a GBP-to-EUR rate.",
+        "No ECB, public FX source, guessed rate, or output file is used before the user supplies rates."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Convert the attached Wise GBP statement to EUR. Use its row-level GBP-to-EUR Wise quote where present. For rows without one, use these Wise daily rates: 09-06-2026=1.16, 24-09-2026=1.17, 26-09-2026=1.16 EUR per GBP. The opening balance is GBP 1,000 and its rate is 1.16. Make Running Balance cumulative and don't add a year-end adjustment.",
+      "expected_output": "A separate 4-row EUR CSV uses the full GBP ledger Amount times the applicable EUR-per-GBP rate, translated fees, cumulative EUR balances from the converted opening balance, and no synthetic revaluation row. Missing-rate assumptions are recorded in Note; the GBP-to-USD quote remains unchanged.",
+      "files": ["evals/files/synthetic_wise_gbp_statement.csv"],
+      "expectations": [
+        "The output preserves the four source rows, order, IDs, and columns.",
+        "The GBP-to-EUR conversion row uses its Wise rate on the full signed GBP ledger Amount, while Exchange To Amount remains preserved as source metadata.",
+        "The GBP-to-USD card row uses the user-provided EUR-per-GBP rate, not its USD quote.",
+        "The translated balances are cumulative from the user-valued GBP 1,000 opening balance and reconcile to translated movements without an end-of-period adjustment.",
+        "User-provided rates are recorded in Note and the original GBP file remains unchanged."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I need this converted Wise GBP statement for a tax filing. I will provide rates for dates without Wise GBP-to-EUR quotes. Can you guarantee that the EUR CSV and cumulative balance will be accepted by the tax authority?",
+      "expected_output": "The assistant does not guarantee compliance. It explains that the result is an analytical translation using Wise/user-provided rates, not an official Wise statement or certified accounting record, and recommends confirming the policy and any year-end FX treatment with an accountant.",
+      "files": [],
+      "expectations": [
+        "The response does not claim or guarantee tax/legal compliance.",
+        "It does not substitute ECB or other public rates for user-provided Wise rates.",
+        "It distinguishes cumulative transaction translation from any accountant-led year-end revaluation."
+      ]
+    }
+  ]
+}

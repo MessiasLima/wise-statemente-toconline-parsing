@@ -1,0 +1,5 @@
+"TransferWise ID",Date,"Date Time",Amount,Currency,Description,"Payment Reference","Running Balance","Exchange From","Exchange To","Exchange Rate","Payer Name","Payee Name","Payee Account Number",Merchant,"Card Last Four Digits","Card Holder Full Name",Attachment,Note,"Total fees","Exchange To Amount","Transaction Type","Transaction Details Type"
+BALANCE-SYNTH-0926,26-09-2026,"26-09-2026 12:27:56.762",-100.00,GBP,"Converted 100.00 GBP to 115.00 EUR",,993.69,GBP,EUR,1.15000,,,,,,,,,1.00,115.00,DEBIT,CONVERSION
+BALANCE_CASHBACK-SYNTH-0926,26-09-2026,"26-09-2026 08:37:31.064",2.00,GBP,Cashback,,1093.69,,,,,,,,,,,,0.00,,CREDIT,UNKNOWN
+TRANSFER-SYNTH-0924,24-09-2026,"24-09-2026 13:31:03.126",100.00,GBP,"Received synthetic deposit",SYNTH-01,1091.69,,,,"Example Payer",,,,,,,,0.00,,CREDIT,DEPOSIT
+CARD-SYNTH-0609,09-06-2026,"09-06-2026 09:04:18.385",-8.31,GBP,"Card transaction of 11.08 USD issued by Example Merchant",,991.69,GBP,USD,1.33695,,,,"Example Merchant",0000,"Example Cardholder",,,0.02,11.08,DEBIT,CARD

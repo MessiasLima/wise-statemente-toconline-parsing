@@ -102,9 +102,11 @@ def security_check():
         elif entry.name == ".git":
             if entry.is_symlink() or not entry.is_dir():
                 fail_security(".git must be a real directory")
-        elif entry.name in {"input", "output"}:
+        elif entry.name in {".agents", "__pycache__", "input", "output"}:
             if entry.is_symlink() or not entry.is_dir():
                 fail_security(f"{entry.name}/ must be a real directory")
+            if entry.name == "__pycache__":
+                check_directory_contents(entry, ".pyc")
         else:
             fail_security(f"unexpected repository entry: {entry.name}")
 

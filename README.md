@@ -9,6 +9,8 @@ Na raiz do repositório devem existir apenas:
 - `create_import_xlsx.py`
 - `importacao_movimentos.xlsx`
 - `.ignore`
+- `.agents/`
+- `__pycache__/` (optional; `.pyc` files only)
 - `input/`
 - `output/`
 - `README.md`
@@ -30,6 +32,6 @@ O script processa todos os CSV existentes em `input/` utilizando `importacao_mov
 
 ## Verificação de segurança
 
-Antes de processar os ficheiros, o script termina se encontrar na raiz um item, ligação simbólica, diretório ou extensão não autorizada. Isto é para evitar o commit de ficheiros contendo dados financeiros.
+Antes de processar os ficheiros, o script termina se encontrar na raiz um item, ligação simbólica, diretório ou extensão não autorizada. Os diretórios locais `.agents/` e `__pycache__/` são explicitamente permitidos; `__pycache__/`, quando presente, só pode conter ficheiros `.pyc`. Os dados de entrada e saída continuam limitados a CSV e XLSX, respetivamente. Isto ajuda a evitar o commit de ficheiros contendo dados financeiros.
 
 Não desative esta verificação nem faça commit de ficheiros financeiros provenientes de qualquer uma das pastas de dados.
